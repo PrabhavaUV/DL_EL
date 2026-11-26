@@ -1,0 +1,33 @@
+PART 1: file-name overlap (for-2sec vs rerec)
+example names  for-2sec: file10294.wav_16k.wav_norm.wav_mono.wav_silence.wav_2sec.wav, file18967.wav_16k.wav_norm.wav_mono.wav_silence.wav_2sec.wav, file10003.wav_16k.wav_norm.wav_mono.wav_silence.wav_2sec.wav
+example names  rerec   : recording7741.wav_norm_mono.wav, recording10934.wav_norm_mono.wav, recording12305.wav_norm_mono.wav
+rerec split   for-2sec split    exact name   same stem   (of rerec clips)
+train         train                      0           0   / 10208
+train         val                        0           0   / 10208
+train         test                       0           0   / 10208
+val           train                      0           0   / 2244
+val           val                        0           0   / 2244
+val           test                       0           0   / 2244
+test          train                      0           0   / 816
+test          val                        0           0   / 816
+test          test                       0           0   / 816
+If every count is 0 AND the naming styles above differ, names cannot answer the question: see Part 2.
+
+PART 2: audio-content similarity (loudness-over-time pattern, best match, 1.0 = identical)
+comparison                                                            median  90th pct  share > 0.9
+for-2sec test vs for-2sec train (different utterances: reference)      0.664     0.741         0.02
+for-2sec val  vs for-2sec train (reference)                            0.696     0.869         0.04
+rerec test vs for-2sec train                                           0.667     0.758         0.01
+rerec test vs for-2sec val                                             0.632     0.721         0.01
+rerec test vs for-2sec test                                            0.872     0.945         0.34
+rerec val vs for-2sec train                                            0.687     0.829         0.01
+rerec val vs for-2sec val                                              0.886     0.962         0.43
+rerec val vs for-2sec test                                             0.614     0.728         0.00
+Reading it: if rerec clips match some for-2sec clip far better than for-2sec clips match each other
+(share > 0.9 much larger than the reference rows), rerec is a re-recording of the same utterances.
+
+PART 3: can a simple model tell the rerec splits apart? (5-fold accuracy, 0.5 = cannot)
+  rerec train vs rerec val: 0.544
+  rerec train vs rerec test: 0.905
+  rerec val vs rerec test: 0.915
+For for-2sec these were 0.511 (train vs val) and 0.950 (train vs test).

@@ -1,0 +1,43 @@
+Extracting features (a few minutes) ...
+
+====================================================================================================
+RESULTS (models trained on for-2sec train only; nothing retrained for the other sets)
+====================================================================================================
+auc = ranking quality (0.5 = guessing, 1.0 = perfect); auc_pm95 = rough 95% margin of error
+fake_rate_on_real = share of REAL clips called fake (want ~0);  fake_rate_on_fake = share of FAKE clips called fake (want ~1)
+
+               model             evaluated_on  n_clips   auc  auc_pm95   eer   acc  fake_rate_on_real  fake_rate_on_fake
+        ALL features             for-2sec val     2826 0.969     0.006 0.091 0.913              0.102              0.927
+        ALL features            for-2sec test     1088 0.416     0.032 0.561 0.424              0.292              0.140
+        ALL features processed_deepvoice test     3740 0.605     0.018 0.426 0.508              0.012              0.028
+           only MFCC             for-2sec val     2826 0.948     0.008 0.109 0.892              0.114              0.899
+           only MFCC            for-2sec test     1088 0.234     0.028 0.684 0.322              0.388              0.031
+           only MFCC processed_deepvoice test     3740 0.632     0.017 0.396 0.510              0.005              0.025
+     all EXCEPT MFCC             for-2sec val     2826 0.917     0.011 0.149 0.855              0.161              0.870
+     all EXCEPT MFCC            for-2sec test     1088 0.872     0.021 0.213 0.719              0.476              0.914
+     all EXCEPT MFCC processed_deepvoice test     3740 0.632     0.019 0.409 0.503              0.003              0.008
+12 level-independent             for-2sec val     2826 0.847     0.015 0.209 0.791              0.222              0.805
+12 level-independent            for-2sec test     1088 0.798     0.026 0.280 0.620              0.691              0.932
+12 level-independent processed_deepvoice test     3740 0.679     0.017 0.364 0.510              0.012              0.032
+
+====================================================================================================
+CHANNEL CHECK: how do the sources differ? (mean feature values, test sets)
+====================================================================================================
+                  source class  loud_peak_db  sil_frac_30db  noise_floor_rel  shape_centroid_mean  shape_flatness  time_spectral_flux
+           for-2sec test  real        25.776          0.054          -24.594               19.260           0.011               4.975
+           for-2sec test  fake        27.735          0.042          -21.401               16.575           0.010               5.240
+processed_deepvoice test  real        13.234          0.013          -19.244               25.515           0.029               3.347
+processed_deepvoice test  fake        16.183          0.108          -26.115               22.936           0.023               3.611
+
+====================================================================================================
+HOW TO READ THIS
+====================================================================================================
+
+processed_deepvoice test: change in AUC compared with for-2sec test
+  ALL features                 0.416 -> 0.605  (+0.189, better; margin +/-0.018)
+  only MFCC                    0.234 -> 0.632  (+0.398, better; margin +/-0.017)
+  all EXCEPT MFCC              0.872 -> 0.632  (-0.240, worse; margin +/-0.019)
+  12 level-independent         0.798 -> 0.679  (-0.119, worse; margin +/-0.017)
+
+Caution: the feature set and the 'drop MFCC' choice were picked by looking at for-2sec TEST results,
+so that column is optimistic. The other sources are the fairer check. Run each only once and report it.

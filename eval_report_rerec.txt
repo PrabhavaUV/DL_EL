@@ -1,0 +1,43 @@
+Extracting features (a few minutes) ...
+
+====================================================================================================
+RESULTS (models trained on for-2sec train only; nothing retrained for the other sets)
+====================================================================================================
+auc = ranking quality (0.5 = guessing, 1.0 = perfect); auc_pm95 = rough 95% margin of error
+fake_rate_on_real = share of REAL clips called fake (want ~0);  fake_rate_on_fake = share of FAKE clips called fake (want ~1)
+
+               model         evaluated_on  n_clips   auc  auc_pm95   eer   acc  fake_rate_on_real  fake_rate_on_fake
+        ALL features         for-2sec val     2826 0.969     0.006 0.091 0.913              0.102              0.927
+        ALL features        for-2sec test     1088 0.416     0.032 0.561 0.424              0.292              0.140
+        ALL features processed_rerec test      816 0.498     0.045 0.512 0.439              0.130              0.007
+           only MFCC         for-2sec val     2826 0.948     0.009 0.109 0.892              0.114              0.899
+           only MFCC        for-2sec test     1088 0.234     0.029 0.684 0.322              0.388              0.031
+           only MFCC processed_rerec test      816 0.303     0.037 0.626 0.412              0.179              0.002
+     all EXCEPT MFCC         for-2sec val     2826 0.917     0.011 0.149 0.855              0.161              0.870
+     all EXCEPT MFCC        for-2sec test     1088 0.872     0.020 0.213 0.719              0.476              0.914
+     all EXCEPT MFCC processed_rerec test      816 0.853     0.026 0.256 0.566              0.863              0.995
+12 level-independent         for-2sec val     2826 0.847     0.015 0.209 0.791              0.222              0.805
+12 level-independent        for-2sec test     1088 0.798     0.026 0.280 0.620              0.691              0.932
+12 level-independent processed_rerec test      816 0.864     0.024 0.211 0.516              0.968              1.000
+
+====================================================================================================
+CHANNEL CHECK: how do the sources differ? (mean feature values, test sets)
+====================================================================================================
+              source class  loud_peak_db  sil_frac_30db  noise_floor_rel  shape_centroid_mean  shape_flatness  time_spectral_flux
+       for-2sec test  real        25.776          0.054          -24.594               19.260           0.011               4.975
+       for-2sec test  fake        27.735          0.042          -21.401               16.575           0.010               5.240
+processed_rerec test  real        32.365          0.054          -25.293               13.243           0.003               4.474
+processed_rerec test  fake        34.308          0.036          -22.610               12.436           0.004               4.769
+
+====================================================================================================
+HOW TO READ THIS
+====================================================================================================
+
+processed_rerec test: change in AUC compared with for-2sec test
+  ALL features                 0.416 -> 0.498  (+0.082, better; margin +/-0.045)
+  only MFCC                    0.234 -> 0.303  (+0.069, BELOW CHANCE: confidently wrong; margin +/-0.037)
+  all EXCEPT MFCC              0.872 -> 0.853  (-0.019, about the same; margin +/-0.026)
+  12 level-independent         0.798 -> 0.864  (+0.067, better; margin +/-0.024)
+
+Caution: the feature set and the 'drop MFCC' choice were picked by looking at for-2sec TEST results,
+so that column is optimistic. The other sources are the fairer check. Run each only once and report it.

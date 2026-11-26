@@ -1,0 +1,15 @@
+# Raw audio datasets (~1.09 GB)
+training/
+validation/
+testing/
+
+# Preprocessed log-mel spectrogram caches (~1.63 GB)
+processed/
+processed_norm/
+processed_rerec/
+processed_deepvoice/*.npz
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
